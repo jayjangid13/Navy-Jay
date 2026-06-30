@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for File Mime Validator module.
+ */
+
+use Drupal\file\Entity\File;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_file_validate().
+ */
+function file_mime_validator_file_validate(File $file) {
+  $errors = [];
+  if (\Drupal::hasService('file_mime_validator')) {
+    $errors = \Drupal::service('file_mime_validator')->checkRealMime($file);
+  }
+  return $errors;
+}
+
+/**
+ * Implements hook_help().
+ */
+function file_mime_validator_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.file_mime_validator':
+      $output = '';
+      $output .= '<p>';
+      $output .= t('The File Mime Validator module validates file for real mime type.');
+      $output .= '</p>';
+      $output .= '<p>' . t('Visit the <a href=":project_link">Project page</a> on Drupal.org for more information.', [
+        ':project_link' => 'https://www.drupal.org/project/file_mime_validator',
+      ]);
+
+      return $output;
+  }
+}

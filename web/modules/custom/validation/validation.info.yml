@@ -1,0 +1,7 @@
+name: 'Validation Module'
+type: module
+description: 'A module to add custom validation on account fields.'
+core_version_requirement: ^10
+package: Custom
+dependencies:
+  - drupal:user

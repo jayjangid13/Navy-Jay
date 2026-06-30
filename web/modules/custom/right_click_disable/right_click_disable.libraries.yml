@@ -1,0 +1,8 @@
+disable_right_click:
+  version: 1.x
+  js:
+    js/disable_right_click.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.behaviors

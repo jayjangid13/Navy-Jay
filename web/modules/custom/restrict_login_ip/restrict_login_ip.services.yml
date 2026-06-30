@@ -1,0 +1,13 @@
+services:
+  restrict_login_ip.access_check:
+    class: Drupal\restrict_login_ip\Access\RestrictLoginIpAccessCheck
+    arguments:
+      - '@config.factory'
+      - '@request_stack'
+    tags:
+      - { name: access_check }
+
+  restrict_login_ip.route_subscriber:
+    class: Drupal\restrict_login_ip\Routing\RestrictLoginIpRouteSubscriber
+    tags:
+      - { name: event_subscriber }

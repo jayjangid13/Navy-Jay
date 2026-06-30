@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Installation file for Inactive Autologout module.
+ */
+
+/**
+ * Update the inactive_autologout config.
+ */
+function inactive_autologout_update_9501() {
+  // Delete Old inactive_autologout config.
+  $old_config = \Drupal::configFactory()->getEditable('inactive_autologout.settings');
+  $role_based_timeout = $old_config->get('role_based_timeout');
+  if (is_null($role_based_timeout)) {
+    $enable = $old_config->get('enable');
+    $configured_roles = $old_config->get('roles');
+    $timeout = $old_config->get('timeout');
+    $old_config->delete();
+
+    // Create New inactive_autologout config from install folder.
+    \Drupal::service('config.installer')->installDefaultConfig('module', 'inactive_autologout');
+
+    // Update New config based Old inactive_autologout config.
+    $new_config = \Drupal::configFactory()->getEditable('inactive_autologout.settings');
+    $new_config->set('enable', $enable)
+      ->set('timeout', $timeout)
+      ->set('role_based_timeout', 0);
+    foreach ($configured_roles as $id => $value) {
+      if (!empty($value)) {
+        $new_config->set($id, 1);
+      }
+      else {
+        $new_config->set($id, 0);
+      }
+      $new_config->set($id . '_timeout', $timeout);
+    }
+    $new_config->save();
+    return t('Updated inactive_autologout.settings to latest config.');
+  }
+}

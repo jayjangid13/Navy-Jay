@@ -1,0 +1,7 @@
+restrict_login_ip.settings:
+  path: '/admin/config/people/restrict-login-ip'
+  defaults:
+    _form: '\Drupal\restrict_login_ip\Form\RestrictLoginIpSettingsForm'
+    _title: 'Restrict Login IP'
+  requirements:
+    _permission: 'administer site configuration'

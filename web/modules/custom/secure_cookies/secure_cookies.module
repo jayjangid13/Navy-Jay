@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Implements hook_page_attachments().
+ */
+function secure_cookies_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'secure_cookies/secure_cookie_js';
+}

@@ -1,0 +1,6 @@
+custom_visitors_aks.admin:
+  title: 'Visits Counter'
+  description: 'visitor start pointer'
+  parent: system.admin
+  route_name: custom_visitors_aks.settings
+  weight: 100

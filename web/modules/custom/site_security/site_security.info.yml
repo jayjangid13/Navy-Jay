@@ -1,0 +1,4 @@
+name: 'Site Security Check'
+type: module
+description: 'Provides additional security of various aspects.'
+core_version_requirement: ^9 || ^10

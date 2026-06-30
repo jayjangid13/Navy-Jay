@@ -1,0 +1,14 @@
+custom_visitors_aks.settings:
+  path: '/admin/config/custom-visitors-aks/settings'
+  defaults:
+    _form: '\Drupal\custom_visitors_aks\Form\CustomvisitoraksSettingsForm'
+    _title: 'Custom Visitor Setting'
+  requirements:
+    _permission: 'administer site configuration'
+custom_visitors_aks.vlist:
+  path: '/admin/config/visitor-data'
+  defaults:
+    _controller: '\Drupal\custom_visitors_aks\Controller\CustomVisitorDataController::getData'
+    _title: 'Custom Visitor Data'
+  requirements:
+    _permission: 'administer site configuration'

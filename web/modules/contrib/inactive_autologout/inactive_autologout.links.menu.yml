@@ -1,0 +1,5 @@
+inactive_autologout.autologout:
+  title: 'Autologout Settings'
+  parent: user.admin_index
+  route_name: inactive_autologout.admin_settings_form
+  weight: 99

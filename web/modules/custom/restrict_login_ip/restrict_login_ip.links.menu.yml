@@ -1,0 +1,5 @@
+restrict_login_ip.settings:
+  title: 'Restrict Login IP'
+  description: 'Configure IP restrictions for the login page.'
+  route_name: restrict_login_ip.settings
+  parent: user.admin_index

@@ -1,0 +1,7 @@
+services:
+  logger.channel.file_mime_validator:
+    parent: logger.channel_base
+    arguments: ['file_mime_validator']
+  file_mime_validator:
+    class: Drupal\file_mime_validator\Service\FileMimeValidator
+    arguments: ['@config.factory','@logger.factory', '@string_translation']

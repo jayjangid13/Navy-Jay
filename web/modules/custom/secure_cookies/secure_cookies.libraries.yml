@@ -1,0 +1,7 @@
+secure_cookie_js:
+  version: 1.x
+  js:
+    js/secure_cookies.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

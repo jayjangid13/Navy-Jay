@@ -1,0 +1,25 @@
+securimage.settings_form:
+  path: /admin/config/people/captcha/securimage
+  defaults:
+    _title: 'Securimage CAPTCHA'
+    _form: \Drupal\securimage\Form\SecurimageSettingsForm
+  requirements:
+    _permission: 'administer CAPTCHA settings'
+securimage.font_preview:
+  path: /admin/config/people/captcha/securimage/font_preview
+  defaults:
+    _title: 'Font example'
+  requirements:
+    _permission: 'administer CAPTCHA settings'
+securimage.image:
+  path: /securimage
+  defaults:
+    _controller: '\Drupal\securimage\Controller\DefaultController::securimage_image'
+  requirements:
+    _access: 'TRUE'
+securimage.audio:
+  path: /securimage-audio
+  defaults:
+    _controller: '\Drupal\securimage\Controller\DefaultController::securimage_audio'
+  requirements:
+    _access: 'TRUE'

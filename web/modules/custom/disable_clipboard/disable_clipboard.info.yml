@@ -1,0 +1,6 @@
+name: Disable Clipboard on Login
+type: module
+description: Disables copy, paste, cut, and drag-drop on the login form.
+package: Security
+core_version_requirement: ^10 || ^11
+version: 1.0

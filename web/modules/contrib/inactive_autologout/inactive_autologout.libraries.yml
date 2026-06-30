@@ -1,0 +1,7 @@
+user_autologout:
+  js:
+    js/jquery.inactivity.min.js: { minified: true }
+    js/custom.min.js: { minified: true }
+  dependencies:
+    - core/jquery
+    - core/drupal

@@ -1,0 +1,46 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Symfony\Component\HttpFoundation\Cookie;
+
+function right_click_disable_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $inline_js = <<<JS
+    (function() {
+        'use strict';
+        if (!window.rightClickDisabled) { // Prevent multiple attachments
+            window.rightClickDisabled = true;
+            document.addEventListener('DOMContentLoaded', function () {
+                document.body.addEventListener('contextmenu', function (e) {
+                    e.preventDefault(); // Disable right-click
+                    // console.log('Right-click disabled!');
+                });
+            });
+        }
+    })();
+  JS;
+
+  $form['#attached']['html_head'][] = [
+    [
+      '#tag' => 'script',
+      '#value' => $inline_js,
+    ],
+    'right_click_disable_inline_js',
+  ];
+  
+}
+
+function right_click_disable_init() {
+  if (isset($_COOKIE[session_name()])) {
+    setcookie(session_name(), session_id(), [
+      'expires' => 0,
+      'path' => '/',
+      'domain' => $_SERVER['HTTP_HOST'],
+      'secure' => TRUE,
+      'httponly' => TRUE,
+      'samesite' => 'Lax',
+    ]);
+  }
+}
+
+
+

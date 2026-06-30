@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Uninstall functions for all_in_one_accessibility module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function all_in_one_accessibility_uninstall() {
+  \Drupal::service('config.factory')
+  ->getEditable('all_in_one_accessibility.userid.settings')
+  ->delete();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new configuration variables and updating current configuration
+ * in it to avoid conflict with any other module.
+ */
+function all_in_one_accessibility_update_8201() {
+  $allinone_userid   = \Drupal::config('all_in_one_accessibility.userid.settings')->get();
+  if (isset($allinone_userid['userid'])) {
+    \Drupal::configFactory()
+      ->getEditable('all_in_one_accessibility.userid.settings')
+      ->set('scripts', $allinone_userid['userid'])
+      ->save();
+  }
+  \Drupal::service('config.factory')
+    ->getEditable('all_in_one_accessibility.userid.settings')
+    ->delete();
+}

@@ -1,0 +1,5 @@
+services:
+  redirct_url.event_subscriber:
+    class: Drupal\redirct_url\EventSubscriber\LanguageRedirectSubscriber
+    tags:
+      - { name: event_subscriber }

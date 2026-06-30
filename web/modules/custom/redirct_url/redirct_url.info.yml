@@ -1,0 +1,6 @@
+name: Redirect URL Module
+type: module
+description: 'A custom Drupal module to handle redirection'
+package: Custom
+core_version_requirement: ^10
+

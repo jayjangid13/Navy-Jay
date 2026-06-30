@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Contains Drupal\inactive_autologout.
+ */
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_page_attachments() for adding any library.
+ */
+function inactive_autologout_page_attachments(array &$attachments) {
+  // Autologout variables pass.
+  $config = \Drupal::config('inactive_autologout.settings');
+  $currentUser = \Drupal::currentUser();
+  $execute = FALSE;
+  if ($config->get('enable') && $currentUser->isAuthenticated()) {
+    $attachments['#attached']['library'][] = 'inactive_autologout/user_autologout';
+    $execute = TRUE;
+    $roles = $currentUser->getRoles();
+    unset($roles['authenticated']);
+    $timeout = $config->get('timeout') * 1000;
+    if ($config->get('role_based_timeout') && count($roles) > 0) {
+      foreach ($roles as $key => $value) {
+        if ($config->get($key)) {
+          $timeout = !empty($config->get($key . '_timeout')) ? $config->get($key . '_timeout') * 1000 : $timeout;
+          break;
+        }
+      }
+    }
+    // Site base url.
+    $site_base_url = Url::fromUri('internal:/')->setAbsolute()->toString();
+    $attachments['#attached']['drupalSettings']['baseUrl'] = $site_base_url;
+    $attachments['#attached']['drupalSettings']['inactive_autologout']['timeout'] = $timeout ?? 0;
+    $attachments['#attached']['drupalSettings']['inactive_autologout']['execute'] = $execute;
+    $attachments['#attached']['drupalSettings']['inactive_autologout']['enable'] = $config->get('enable');
+  }
+}

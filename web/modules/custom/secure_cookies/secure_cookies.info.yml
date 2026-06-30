@@ -1,0 +1,6 @@
+name: Secure Cookies Enhancer
+description: Force SameSite, Secure, Path on cookies like twk_uuid_*, localtimestamp, servertimestamp.
+type: module
+core_version_requirement: ^10
+package: Security
+version: 1.0

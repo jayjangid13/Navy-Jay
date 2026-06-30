@@ -1,0 +1,6 @@
+disable_clipboard_js:
+  version: 1.x
+  js:
+    js/disable_clipboard.js: {}
+  dependencies:
+    - core/jquery

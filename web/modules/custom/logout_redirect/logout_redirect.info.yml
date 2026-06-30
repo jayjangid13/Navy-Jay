@@ -1,0 +1,11 @@
+name: Logout Redirect
+description: After user logout if user click browser back button then redirect to login page.
+type: module
+core_version_requirement: ^9 || ^10
+package: Logout Redirect
+configure: logout_redirect.config_form
+
+# Information added by Drupal.org packaging script on 2023-12-29
+version: '2.0.1'
+project: 'logout_redirect'
+datestamp: 1703848746

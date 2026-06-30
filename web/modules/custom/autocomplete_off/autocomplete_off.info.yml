@@ -1,0 +1,7 @@
+name: 'Autocomplete Off'
+type: module
+description: 'Disable autocomplete for password fields on login and registration forms.'
+package: Custom
+core_version_requirement: ^10
+dependencies:
+  - drupal:user

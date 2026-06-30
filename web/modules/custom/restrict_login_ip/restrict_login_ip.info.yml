@@ -1,0 +1,13 @@
+name: 'Restrict Login Page by IP'
+type: module
+description: 'Restricts user login page access based on user IP address.'
+core_version_requirement: ^10||^11
+package: Access control
+configure: restrict_login_ip.settings
+dependencies:
+  - drupal:user
+
+# Information added by Drupal.org packaging script on 2024-10-10
+version: '1.0.0-alpha2'
+project: 'restrict_login_ip'
+datestamp: 1728562682

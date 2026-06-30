@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * @file
+ * Implements image CAPTCHA for use with the CAPTCHA module
+ */
+
+use Drupal\Core\Url;
+use Drupal\filter\Render\FilteredMarkup;
+use Drupal\securimage\SecurimageMiddleware;
+use Drupal\securimage\Controller\DefaultController;
+
+/**
+ * Implements hook_help().
+ */
+function securimage_help($route_name) {
+  switch ($route_name) {
+    case 'securimage.settings_form':
+      return '<p>' . t('CAPTCHA is a popular challenge where a random textual code is obfuscated in an image or audio clip. This module uses the Securimage library.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_captcha().
+ */
+function securimage_captcha($op, $captcha_type = '', $captcha_sid = NULL) {
+  static $instance = 0;
+
+  switch ($op) {
+    case 'list':
+      return ['Securimage'];
+
+    case 'generate':
+      if ($captcha_type == 'Securimage') {
+        // In maintenance mode, the image CAPTCHA does not work because the request
+        // for the image itself won't succeed (only ?q=user is permitted for
+        // unauthenticated users). We fall back to the Math CAPTCHA in that case.
+        if (\Drupal::state()->get('system.maintenance_mode') && \Drupal::currentUser()->isAnonymous()) {
+          return captcha_captcha('generate', 'Math');
+        }
+
+        // Build the result to return. Start with a dummy solution; the actual
+        // solution will be generated later on.
+        $result = ['solution' => DefaultController::SECURIMAGE_SOLUTION_UNSET];
+
+        // Generate image source URL (add timestamp to avoid problems with
+        // client side caching: subsequent images of the same CAPTCHA session
+        // have the same URL, but should display a different code).
+        $options = [
+          'query' => [
+            'sid' => $captcha_sid,
+            'ts' => \Drupal::time()->getRequestTime(),
+          ],
+        ];
+        $img_src = Url::fromRoute('securimage.image', [], $options)->toString();
+
+        $vars = SecurimageMiddleware::getStoredSettings();
+        $securimage = SecurimageMiddleware::getInstance();
+        $result['form']['wrapper'] = [
+          '#prefix' => '<div class="captcha-wrapper">',
+          '#suffix' => '</div>',
+          '#weight' => -1,
+          '#attached' => ['library' => ['core/jquery']],
+        ];
+        $img_id = 'captcha_image' . ($instance++);
+        $securimage_id = \Securimage::generateCaptchaId();
+        $img_markup = $securimage::getCaptchaHtml([
+          'show_image_url' => $img_src,
+          'show_text_input' => FALSE,
+          'securimage_path' => vendor_stream_wrapper_create_url('vendor://dapphp/securimage'),
+          'audio_play_url' => Url::fromRoute('securimage.audio', [], $options)->toString(),
+          'image_id' => $img_id,
+          'captcha_id' => $securimage_id,
+        ]);
+
+        // Make the Refresh text a little more descriptive.
+        $refresh = t('Refresh validation image');
+        $img_markup = str_replace('Refresh Image', $refresh, $img_markup);
+        // Add a label and change the Play image to a form input to improve
+        // accessibility.
+        $img_markup = str_replace('<img class="captcha_play_image"', '<label class="visually-hidden" for="captcha_play_image">' . t('Play validation audio') . '</label><input type="image" id="captcha_play_image" class="captcha_play_image"', $img_markup );
+        // Add a label and change the Reload image to a form input to improve
+        // accessibility.
+        $img_markup = preg_replace('{<img (height="[^>]+?)onclick="this\.blur\(\)"(.*?>)}', '<label class="visually-hidden" for="captcha_reload_image">' . $refresh . '</label><input type="image" id="captcha_reload_image" $1$2', $img_markup);
+        // Remove blur() from Javascript and use a method to find the image to
+        // refresh that does not rely on the ID.
+        $img_markup = preg_replace('{onclick="securimageRefreshCaptcha.*?"}', 'onclick="jQuery(this).closest(\'form\').find(\'.captcha-wrapper img:first\')[0].src = \'' . $img_src . '&id=' . $securimage_id . '&new&_=\' + Math.random(); if (' . $img_id . '_audioObj) ' . $img_id . '_audioObj.refresh(\'' . $securimage_id . '&_=\' + Math.random()); return false"', $img_markup );
+        $result['form']['wrapper']['captcha_image'] = array(
+          '#markup' => FilteredMarkup::create($img_markup),
+        );
+        $result['form']['captcha_response'] = [
+          '#type' => 'textfield',
+          '#title' => t('What text is in the image?'),
+          '#description' => $vars['_module']['textfield_prompt'],
+          '#required' => TRUE,
+          '#size' => 15,
+        ];
+
+        $result['captcha_validate'] = 'captcha_validate_case_insensitive_equality';
+
+        return $result;
+      }
+      break;
+  }
+}

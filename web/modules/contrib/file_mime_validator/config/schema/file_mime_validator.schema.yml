@@ -1,0 +1,19 @@
+file_mime_validator.settings:
+  type: mapping
+  label: 'File Mime Types Settings'
+  mapping:
+    file_mime_validator_text:
+      type: string
+      label: 'Text'
+    file_mime_validator_image:
+      type: string
+      label: 'Image'
+    file_mime_validator_compression:
+      type: string
+      label: 'Compression'
+    file_mime_validator_audio:
+      type: string
+      label: 'Audio'
+    file_mime_validator_video:
+      type: string
+      label: 'Video'

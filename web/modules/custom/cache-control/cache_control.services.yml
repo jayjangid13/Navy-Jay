@@ -1,0 +1,5 @@
+services:
+  cache_control.event_subscriber:
+    class: Drupal\cache_control\EventSubscriber\CacheControlSubscriber
+    tags:
+      - { name: event_subscriber }

@@ -1,0 +1,5 @@
+services:
+  secure_cookies.subscriber:
+    class: Drupal\secure_cookies\EventSubscriber\SecureCookiesSubscriber
+    tags:
+      - { name: event_subscriber }

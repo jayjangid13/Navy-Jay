@@ -1,0 +1,6 @@
+services:
+  custom_visitors_aks.terminate:
+    class: Drupal\custom_visitors_aks\EventSubscriber\CustomVisitorAksSubscriber
+    arguments: ['@current_user', '@database', '@current_route_match', '@title_resolver', '@config.factory', '@router.admin_context', '@module_handler']
+    tags:
+      - { name: event_subscriber }     

@@ -1,0 +1,4 @@
+securimage.settings_form:
+  route_name: securimage.settings_form
+  title: 'Securimage CAPTCHA'
+  base_route: captcha_settings

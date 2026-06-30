@@ -1,0 +1,26 @@
+{
+  "name": "drupal/file_mime_validator",
+  "description": "This module will help in validating real mime type of file.",
+  "type": "drupal-module",
+  "keywords": [
+    "Drupal",
+    "File Management",
+    "Security"
+  ],
+  "homepage": "https://www.drupal.org/project/file_mime_validator",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Akshay Singh (akshay.singh)",
+      "homepage": "https://www.drupal.org/u/akshaysingh",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/file_mime_validator",
+    "source": "http://cgit.drupalcode.org/file_mime_validator"
+  },
+  "require": {
+    "drupal/core": "^9 || ^10"
+  }
+}

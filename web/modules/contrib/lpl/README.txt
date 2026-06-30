@@ -1,0 +1,1 @@
+Logo per language

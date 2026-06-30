@@ -1,0 +1,10 @@
+name: File Mime Validator
+type: module
+description: This module will help in validating real mime type of file.
+package: Security
+core_version_requirement: ^9 || ^10
+
+# Information added by Drupal.org packaging script on 2023-01-27
+version: '8.x-2.0'
+project: 'file_mime_validator'
+datestamp: 1674847688

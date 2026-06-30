@@ -1,0 +1,110 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * This alters the user registration and account edit forms.
+ */
+function validation_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Add custom validation handler.
+
+  if ($form_id === 'user_form' || $form_id === 'user_register-form') {
+    // Add custom validation handler.
+    $form['#validate'][] = 'validation_form_user_form';
+
+
+  }
+}
+
+/**
+ * Custom validation function for the user form.
+ */
+function validation_form_user_form(array &$form, FormStateInterface $form_state) {
+
+
+  // \Drupal::messenger()->addMessage('Custom validation function called.');
+
+
+  // Validate Department / Ministry field (text only).
+
+  $department_values = $form_state->getValue('field_department_ministry');
+
+  foreach ($department_values as $department_item) {
+    $department = $department_item['value'];
+    if (!preg_match('/^[a-zA-Z\s]+$/', $department)) {
+      $form_state->setErrorByName('field_department_ministry', t('The Department / Ministry field should contain text only.'));
+      break; // Exit the loop after setting the error to avoid duplicate errors.
+    }
+  }
+
+// Validate Postal Address field (text or numbers only).
+
+  $postal_address_values = $form_state->getValue('field_postal_address');
+
+  foreach ( $postal_address_values as $postal_address_item) {
+    $postal_address = $postal_address_item['value'];
+
+    if (!preg_match('/^[a-zA-Z0-9\s]+$/', $postal_address)) {
+      $form_state->setErrorByName('field_postal_address', t('The Postal Address should contain text and numbers only.'));
+      break; // Exit the loop after setting the error to avoid duplicate errors.
+    }
+  }
+
+  // Validate State field (text only).
+
+
+  $state_values = $form_state->getValue('field_state');
+
+  foreach ( $state_values as $state_item) {
+    $state = $state_item['value'];
+
+    // Perform validation on the department value.
+    if (!preg_match('/^[a-zA-Z\s]+$/', $state)) {
+      $form_state->setErrorByName('field_state', t('The State field should contain text only.'));
+      break; // Exit the loop after setting the error to avoid duplicate errors.
+    }
+  }
+
+
+// Validate Mobile field (exactly 10 digits).
+
+  $mobile_values = $form_state->getValue('field_mobile');
+
+  foreach ( $mobile_values as $mobile_item) {
+    $mobile = $mobile_item['value'];
+
+    // Perform validation on the department value.
+    if (!preg_match('/^\d{10}$/', $mobile)) {
+      $form_state->setErrorByName('field_mobile', t('The Mobile field must contain exactly 10 digits.'));
+      break; // Exit the loop after setting the error to avoid duplicate errors.
+    }
+  }
+
+
+
+  // Validate Telephone Number field (digits only).
+
+  $telephone_values = $form_state->getValue('field_telephone_number');
+
+  foreach ( $telephone_values as $telephone_item) {
+    $telephone = $telephone_item['value'];
+
+    // Perform validation on the department value.
+    if (!preg_match('/^\d+$/', $telephone)) {
+      $form_state->setErrorByName('field_telephone_number', t('The Telephone Number should contain digits only.'));
+      break; // Exit the loop after setting the error to avoid duplicate errors.
+    }
+  }
+
+
+
+
+
+
+  // $telephone = $form_state->getValue('field_telephone_number');
+  // if (is_string($telephone) && !preg_match('/^\d+$/', $telephone)) {
+  //   $form_state->setErrorByName('field_telephone_number', t('The Telephone Number should contain digits only.'));
+  // }
+}

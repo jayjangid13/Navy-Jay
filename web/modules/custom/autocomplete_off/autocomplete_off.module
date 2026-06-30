@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * Implements hook_form_alter().
+ */
+function autocomplete_off_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Disable autocomplete on the password fields for the login and registration forms.
+  if ($form_id == 'user_login_form' || $form_id == 'user_register_form') {
+    if (isset($form['pass'])) {
+      $form['pass']['#attributes']['autocomplete'] = 'off';
+    }
+  }
+}

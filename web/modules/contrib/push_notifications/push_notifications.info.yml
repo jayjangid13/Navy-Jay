@@ -1,0 +1,11 @@
+name: Push Notifications
+type: module
+description: Push notification functionality for iPhone and Android.
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10 || ^11
+package: Custom
+
+# Information added by Drupal.org packaging script on 2024-11-20
+version: '8.x-1.0-alpha2'
+project: 'push_notifications'
+datestamp: 1732124118

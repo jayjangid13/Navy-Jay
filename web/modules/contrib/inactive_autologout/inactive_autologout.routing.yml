@@ -1,0 +1,32 @@
+inactive_autologout.admin_settings_form:
+  path: '/admin/config/people/autologoutsettings'
+  defaults:
+    _form: '\Drupal\inactive_autologout\Form\SettingsForm'
+    _title: 'Automated logout settings'
+  requirements:
+    _permission: 'administer inactiveautologout'
+
+inactive_autologout.autologout:
+  path: '/autologout'
+  defaults:
+    _controller: 'Drupal\inactive_autologout\Controller\AutologoutController::autologout'
+    _title: 'Logout'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+inactive_autologout.autologoutactive:
+  path: '/autologout_active'
+  defaults:
+    _controller: 'Drupal\inactive_autologout\Controller\AutologoutController::autologoutActive'
+    _title: ''
+  methods: [GET]
+  requirements:
+    _user_is_logged_in: 'TRUE'
+
+inactive_autologout.autologoutgettimestamp:
+  path: '/autologout_gettimestamp'
+  defaults:
+    _controller: 'Drupal\inactive_autologout\Controller\AutologoutController::autologoutGetTimestamp'
+    _title: ''
+  requirements:
+    _user_is_logged_in: 'TRUE'

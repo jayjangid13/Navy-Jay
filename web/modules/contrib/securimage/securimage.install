@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * The install file for Securimage.
+ */
+
+use Drupal\securimage\SecurimageMiddleware;
+
+/**
+ * Implements hook_install().
+ */
+function securimage_install() {
+  // The securimage_cache database table is created by the library, and is not
+  // defined in hook_schema(), so it must be created here.
+  //
+  // We can't call createDatabaseTables() directly, so turn the table check
+  // on and do something that will cause creation.
+  $securimage = SecurimageMiddleware::getInstance(['skip_table_check' => FALSE]);
+  $securimage->check('foo', \Securimage::generateCaptchaId());
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function securimage_uninstall() {
+  // The securimage_cache database table is created by the library, and is not
+  // defined in hook_schema(), so it must be deleted here.
+  \Drupal::database()->schema()->dropTable('securimage_cache');
+}

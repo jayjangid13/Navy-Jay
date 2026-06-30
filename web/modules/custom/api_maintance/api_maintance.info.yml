@@ -1,0 +1,10 @@
+name: API maintance mode
+type: module
+description: 'For API maintenance mode set module'
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom
+
+
+
+
+

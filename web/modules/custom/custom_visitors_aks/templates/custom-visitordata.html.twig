@@ -1,0 +1,8 @@
+<div class="visitor-data-list">
+<h1>IP Address</h1>
+<ul>
+    {% for ip in v_data %}
+        <li>{{ ip.username|e }}</li>
+    {% endfor %}
+</ul>
+</div>

@@ -1,0 +1,6 @@
+name: 'Login Page Links'
+type: module
+description: 'Login Page Links'
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom
+

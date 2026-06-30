@@ -1,0 +1,6 @@
+name: AKS custom Visitors
+type: module
+description: "This module used for displaying a visitors info."
+package: Custom
+core_version_requirement: ^8 || ^9 || ^10
+datestamp: 1670915769

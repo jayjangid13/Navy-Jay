@@ -1,0 +1,13 @@
+{
+  "name": "drupal/securimage",
+  "description": "Provides an image based CAPTCHA using the securimage library.",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/securimage",
+  "require": {
+    "robloach/component-installer": "*",
+    "dapphp/securimage": "^4"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

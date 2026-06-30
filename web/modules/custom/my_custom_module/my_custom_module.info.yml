@@ -1,0 +1,7 @@
+name: 'My Custom Module'
+type: module
+description: 'A custom module to create a custom page.'
+core_version_requirement: ^10
+package: Custom
+version: 1.0.0
+dependencies: []

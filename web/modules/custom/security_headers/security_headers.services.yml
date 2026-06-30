@@ -1,0 +1,5 @@
+services:
+  security_headers.event_subscriber:
+    class: Drupal\security_headers\EventSubscriber\SecurityHeadersSubscriber
+    tags:
+      - { name: event_subscriber }

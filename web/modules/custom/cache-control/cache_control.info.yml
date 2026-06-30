@@ -1,0 +1,7 @@
+name: 'Cache Control'
+type: module
+description: 'Adds Cache-Control and Pragma headers to all responses.'
+core_version_requirement: ^10
+package: Custom
+dependencies: []
+version: 1.0

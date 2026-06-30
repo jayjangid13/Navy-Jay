@@ -1,0 +1,76 @@
+<?php
+/**
+ * @file
+ * Add scripts and styles from the frontend on all over the site.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Form\ConfigFormBase;
+use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Extension\InfoParser;
+
+/**
+ * Implements hook_help().
+ */
+function all_in_one_accessibility_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.all_in_one_accessibility':
+      $output = '<h2>' . t('About') . '</h2>';
+      $output .= '<p>' . t('This module provides accessibility options to users ') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_library_info_build().
+ *
+ */
+
+function all_in_one_accessibility_library_info_build() {
+
+
+  $allinone_userid = \Drupal::config('all_in_one_accessibility.userid.settings')->get();
+  $libraries = [];
+
+  if (!\Drupal::service('router.admin_context')->isAdminRoute()) {
+    $url = "https://www.skynettechnologies.com/add-ons/license-api.php?";
+
+    if(!isset($allinone_userid["colorcode"]))
+    {
+      $allinone_userid["colorcode"] = "";
+    }
+    if(!isset($allinone_userid["userid"]))
+    {
+      $allinone_userid["userid"] = "";
+    }
+    if(!isset($allinone_userid["position"]))
+    {
+      $allinone_userid["position"] = "bottom_right";
+    }
+    if (!isset($allinone_userid["aioa_icon_type"]) || empty($allinone_userid["aioa_icon_type"])) {
+      $allinone_userid["aioa_icon_type"] = "aioa-icon-type-1";
+    }
+    if (!isset($allinone_userid["aioa_icon_size"]) || empty($allinone_userid["aioa_icon_size"])) {
+      $allinone_userid["aioa_icon_size"] = "aioa-default-icon";
+    }
+    $baseURL = "https://www.skynettechnologies.com/accessibility/js/all-in-one-accessibility-js-widget-minify.js";
+    if (strpos($_SERVER['HTTP_USER_AGENT'], "Chrome-Lighthouse") === false) {
+          $libraries['ada_lib'] = [
+        'js' => [ $baseURL.'?colorcode='.$allinone_userid["colorcode"]. "&token=". $allinone_userid["userid"]."&t=".rand(9999,9999999)."&position=". $allinone_userid["position"].".". $allinone_userid["aioa_icon_type"] . "." . $allinone_userid["aioa_icon_size"] => [
+            "attributes" => ['id' => 'aioa-adawidget'],
+          ],
+        ],
+      ];
+    }
+  }
+  return $libraries;
+}
+
+function all_in_one_accessibility_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] =
+  'all_in_one_accessibility/ada_lib';
+}
+
+

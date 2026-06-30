@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Logs cusotm visitors aks for your site.
+ */
+
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_theme().
+ */
+function custom_visitors_aks_theme() {
+  return [
+    'visitors_aks' => [
+      'template' => 'visitors_aks',
+      'variables' => [
+        'path' => NULL,
+        'x' => NULL,
+        'y' => NULL,
+        'width' => NULL,
+        'height' => NULL,
+      ],
+    ],
+	'custom_visitors_aks_info' => [
+      'template' => 'custom_visitors_aks_info',
+      'variables' => [
+        'items' => NULL,
+      ],
+    ],
+	'custom_visitordata' => [
+      'variables' => [
+        'v_data' => NULL,
+      ],
+    ],
+  ];
+}
+

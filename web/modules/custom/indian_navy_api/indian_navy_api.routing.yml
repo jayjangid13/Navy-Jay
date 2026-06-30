@@ -1,0 +1,9 @@
+indian_navy_api.press_release:
+  path: '/api/press-release'
+  defaults:
+    _controller: '\Drupal\indian_navy_api\Controller\PressReleaseController::getPressReleases'
+    _title: 'Press Releases'
+  requirements:
+    _permission: 'access content'
+  methods: [GET]
+  

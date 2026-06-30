@@ -1,0 +1,9 @@
+name: 'Indian Navy API'
+type: module
+description: 'A custom module to expose Press Release content type via API.'
+core_version_requirement: ^9 || ^10
+package: Custom
+dependencies:
+  - drupal:node
+  - drupal:rest
+  - drupal:serialization

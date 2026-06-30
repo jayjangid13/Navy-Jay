@@ -1,0 +1,5 @@
+name: Right Click Disable
+type: module
+description: Disable right click on login page.
+core_version_requirement: ^10
+package: Custom

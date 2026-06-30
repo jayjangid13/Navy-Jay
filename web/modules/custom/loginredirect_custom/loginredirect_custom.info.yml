@@ -1,0 +1,5 @@
+name: Login Redirect Custom
+type: module
+description: 'Custom login redirect module'
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom

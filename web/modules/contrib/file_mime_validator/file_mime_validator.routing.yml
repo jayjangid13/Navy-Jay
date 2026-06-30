@@ -1,0 +1,7 @@
+file_mime_validator.file_types_mime_config_form:
+  path: /admin/config/system/file-mime-validator/file-types-mime-config
+  defaults:
+    _title: "File Types Mime Configuration"
+    _form: \Drupal\file_mime_validator\Form\FileTypesMimeConfig
+  requirements:
+    _permission: "administer"

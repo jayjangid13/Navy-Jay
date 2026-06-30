@@ -1,0 +1,19 @@
+<?php
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+function loginredirect_custom_user_login(&$edit, $account) {
+  $req_uri_data = explode('/', $_SERVER['REQUEST_URI']);
+
+  if (!in_array("reset", $req_uri_data)) {
+    $assigned_roles = $account->getRoles();
+
+    if (in_array('forum_user', $assigned_roles)) {
+      $response = new RedirectResponse('/forum');
+      $response->send();
+      return;
+    }
+  }
+}
+
+?>

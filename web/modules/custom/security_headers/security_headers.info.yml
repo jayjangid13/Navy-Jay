@@ -1,0 +1,7 @@
+name: 'Security Headers'
+type: module
+description: 'Adds various security headers to all responses.'
+core_version_requirement: ^10
+package: Custom
+dependencies: []
+version: 1.0

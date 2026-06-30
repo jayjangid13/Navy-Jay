@@ -1,0 +1,7 @@
+my_custom_module.custom_page:
+  path: '/custom-page'
+  defaults:
+    _controller: '\Drupal\my_custom_module\Controller\CustomPageController::content'
+    _title: 'Custom Page'
+  requirements:
+    _permission: 'administer site configuration'

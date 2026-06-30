@@ -1,0 +1,11 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function disable_clipboard_form_user_login_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Attach JS to disable clipboard.
+  $form['#attached']['library'][] = 'disable_clipboard/disable_clipboard_js';
+}

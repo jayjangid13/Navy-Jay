@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * @file
+ * Install/uninstall custom visitors aks module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function custom_visitors_aks_schema() {
+  $schema['custom_visitors_aks'] = [
+    'fields' => [
+      'visitors_id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'visitors_uid' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'visitors_ip' => [
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'visitors_date_time' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'visitors_url' => [
+        'type' => 'text',
+        'not null' => TRUE,
+      ],
+      'visitors_referer' => [
+        'type' => 'text',
+        'not null' => TRUE,
+      ],
+      'visitors_path' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'visitors_title' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'visitors_user_agent' => [
+        'type' => 'text',
+        'not null' => TRUE,
+      ],
+	  'ip_main' => [
+        'type' => 'text',
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['visitors_id'],
+  ];
+  return $schema;
+}

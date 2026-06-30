@@ -1,0 +1,5 @@
+file_mime_validator.file_types_mime_config_form:
+  route_name: file_mime_validator.file_types_mime_config_form
+  title: "File Mime Validator"
+  description: "Configure File Mime Validator."
+  parent: system.admin_config_system
