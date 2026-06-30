@@ -67,7 +67,19 @@
   Drupal.behaviors.password_encrypt = {
     attach: function (context, settings) {
       var publicKeyPem = drupalSettings.password_encrypt && drupalSettings.password_encrypt.publicKey;
-      var selector = 'form.user-login, form.user-login-form, form.user-register-form, form.user-form';
+      var selector = [
+        'form.user-login',
+        'form.user-login-form',
+        'form.user-register-form',
+        'form.user-form',
+        'form#user-login-form',
+        'form#user-register-form',
+        'form[id^="user-login-form"]',
+        'form[id^="user-register-form"]',
+        'form[action*="/user/login"]',
+        'form[action*="/user/register"]',
+        'form[action*="/user/"]'
+      ].join(', ');
       var forms = [];
 
       if (context.matches && context.matches(selector)) {
