@@ -1,5 +1,7 @@
-(function ($, Drupal, drupalSettings) {
+(function (Drupal, drupalSettings) {
   'use strict';
+
+  var importedPublicKeyPromise = null;
 
   function pemToArrayBuffer(pem) {
     var base64 = pem
@@ -27,16 +29,45 @@
     return window.btoa(binary);
   }
 
-  function importPublicKey(publicKeyPem) {
-    return window.crypto.subtle.importKey(
-      'spki',
-      pemToArrayBuffer(publicKeyPem),
-      {
-        name: 'RSA-OAEP',
-        hash: 'SHA-1'
-      },
-      false,
-      ['encrypt']
+  function getPublicKey() {
+    var publicKeyPem = drupalSettings.password_encrypt && drupalSettings.password_encrypt.publicKey;
+    if (!publicKeyPem || !window.crypto || !window.crypto.subtle || !window.TextEncoder) {
+      return null;
+    }
+
+    if (!importedPublicKeyPromise) {
+      importedPublicKeyPromise = window.crypto.subtle.importKey(
+        'spki',
+        pemToArrayBuffer(publicKeyPem),
+        {
+          name: 'RSA-OAEP',
+          hash: 'SHA-1'
+        },
+        false,
+        ['encrypt']
+      );
+    }
+
+    return importedPublicKeyPromise;
+  }
+
+  function shouldProtectForm(form) {
+    if (!form || form.dataset.passwordEncryptSubmitting === '1') {
+      return false;
+    }
+
+    var action = form.getAttribute('action') || '';
+    var id = form.getAttribute('id') || '';
+    var formId = form.querySelector('input[name="form_id"]');
+    var hasCredentialFields = form.querySelector('input[name="name"], input[type="password"]');
+
+    return !!hasCredentialFields && (
+      id.indexOf('user-login-form') === 0 ||
+      id.indexOf('user-register-form') === 0 ||
+      action.indexOf('/user/login') !== -1 ||
+      action.indexOf('/user/register') !== -1 ||
+      action.indexOf('/user/') !== -1 ||
+      (formId && ['user_login_form', 'user_register_form', 'user_form'].indexOf(formId.value) !== -1)
     );
   }
 
@@ -46,11 +77,13 @@
       return Promise.resolve();
     }
 
-    var encoded = new window.TextEncoder().encode(value);
-    return window.crypto.subtle.encrypt({ name: 'RSA-OAEP' }, publicKey, encoded)
-      .then(function (encrypted) {
-        field.value = 'rsa:' + arrayBufferToBase64(encrypted);
-      });
+    return window.crypto.subtle.encrypt(
+      { name: 'RSA-OAEP' },
+      publicKey,
+      new window.TextEncoder().encode(value)
+    ).then(function (encrypted) {
+      field.value = 'rsa:' + arrayBufferToBase64(encrypted);
+    });
   }
 
   function encryptForm(form, publicKey) {
@@ -64,62 +97,40 @@
     return Promise.all(tasks);
   }
 
-  Drupal.behaviors.password_encrypt = {
-    attach: function (context) {
-      var publicKeyPem = drupalSettings.password_encrypt && drupalSettings.password_encrypt.publicKey;
-      var selector = [
-        'form.user-login',
-        'form.user-login-form',
-        'form.user-register-form',
-        'form.user-form',
-        'form#user-login-form',
-        'form#user-register-form',
-        'form[id^="user-login-form"]',
-        'form[id^="user-register-form"]'
-      ].join(', ');
-      var forms = [];
+  function submitEncryptedForm(form) {
+    form.dataset.passwordEncryptSubmitting = '1';
+    if (form.requestSubmit) {
+      form.requestSubmit();
+    }
+    else {
+      form.submit();
+    }
+  }
 
-      if (!publicKeyPem || !window.crypto || !window.crypto.subtle || !window.TextEncoder) {
+  Drupal.behaviors.password_encrypt = {
+    attach: function () {
+      var publicKeyPromise = getPublicKey();
+      if (!publicKeyPromise || window.passwordEncryptDocumentAttached) {
         return;
       }
 
-      if (context.matches && context.matches(selector)) {
-        forms.push(context);
-      }
-      if (context.querySelectorAll) {
-        forms = forms.concat(Array.prototype.slice.call(context.querySelectorAll(selector)));
-      }
+      window.passwordEncryptDocumentAttached = true;
+      document.addEventListener('submit', function (event) {
+        var form = event.target;
+        if (!shouldProtectForm(form)) {
+          return;
+        }
 
-      importPublicKey(publicKeyPem).then(function (publicKey) {
-        forms.forEach(function (form) {
-          if (form.dataset.passwordEncryptAttached === '1') {
-            return;
-          }
-
-          form.dataset.passwordEncryptAttached = '1';
-          form.addEventListener('submit', function (event) {
-            if (form.dataset.passwordEncryptSubmitting === '1') {
-              return;
-            }
-
-            event.preventDefault();
-            encryptForm(form, publicKey).then(function () {
-              form.dataset.passwordEncryptSubmitting = '1';
-              if (form.requestSubmit) {
-                form.requestSubmit();
-              }
-              else {
-                form.submit();
-              }
-            }).catch(function () {
-              window.alert(Drupal.t('Unable to encrypt credentials. Please reload the page and try again.'));
-            });
-          });
+        event.preventDefault();
+        publicKeyPromise.then(function (publicKey) {
+          return encryptForm(form, publicKey);
+        }).then(function () {
+          submitEncryptedForm(form);
+        }).catch(function () {
+          window.alert(Drupal.t('Unable to encrypt credentials. Please reload the page and try again.'));
         });
-      }).catch(function () {
-        window.alert(Drupal.t('Unable to initialize credential encryption. Please reload the page and try again.'));
-      });
+      }, true);
     }
   };
 
-})(jQuery, Drupal, drupalSettings);
+})(Drupal, drupalSettings);
