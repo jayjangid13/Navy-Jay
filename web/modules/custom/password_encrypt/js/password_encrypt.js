@@ -107,30 +107,40 @@
     }
   }
 
-  Drupal.behaviors.password_encrypt = {
-    attach: function () {
-      var publicKeyPromise = getPublicKey();
-      if (!publicKeyPromise || window.passwordEncryptDocumentAttached) {
+  function attachSubmitProtection() {
+    var publicKeyPromise = getPublicKey();
+    if (!publicKeyPromise || window.passwordEncryptDocumentAttached) {
+      return;
+    }
+
+    window.passwordEncryptDocumentAttached = true;
+    document.addEventListener('submit', function (event) {
+      var form = event.target;
+      if (!shouldProtectForm(form)) {
         return;
       }
 
-      window.passwordEncryptDocumentAttached = true;
-      document.addEventListener('submit', function (event) {
-        var form = event.target;
-        if (!shouldProtectForm(form)) {
-          return;
-        }
+      event.preventDefault();
+      publicKeyPromise.then(function (publicKey) {
+        return encryptForm(form, publicKey);
+      }).then(function () {
+        submitEncryptedForm(form);
+      }).catch(function () {
+        window.alert(Drupal.t('Unable to encrypt credentials. Please reload the page and try again.'));
+      });
+    }, true);
+  }
 
-        event.preventDefault();
-        publicKeyPromise.then(function (publicKey) {
-          return encryptForm(form, publicKey);
-        }).then(function () {
-          submitEncryptedForm(form);
-        }).catch(function () {
-          window.alert(Drupal.t('Unable to encrypt credentials. Please reload the page and try again.'));
-        });
-      }, true);
+  Drupal.behaviors.password_encrypt = {
+    attach: function () {
+      attachSubmitProtection();
     }
   };
+
+  attachSubmitProtection();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachSubmitProtection);
+  }
 
 })(Drupal, drupalSettings);
